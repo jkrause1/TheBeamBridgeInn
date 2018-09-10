@@ -1,0 +1,4 @@
+columns:
+    id:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.id'
+        type: number

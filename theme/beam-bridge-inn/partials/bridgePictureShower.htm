@@ -1,0 +1,7 @@
+==
+<h3>{{ gridImageId }} - Arbeitspaket: {{ workPackageId }}</h3>
+{% if workPackageEmpty %}
+    <img src="{{ "assets/images/Beer-Cup-3.jpg"|theme }}" width="400" height="500" id="bridgePicture" />
+{% else %}
+    <img src="{{ imageData }}" id="bridgePicture" />
+{% endif %}

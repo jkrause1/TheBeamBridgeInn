@@ -1,0 +1,199 @@
+title = "classification"
+url = "/classification"
+layout = "default"
+is_hidden = 0
+==
+<?php
+use JohannesKrause\BridgeAnnotator\Models\WorkPackage;
+use JohannesKrause\BridgeAnnotator\Models\BridgePictures;
+use JohannesKrause\BridgeAnnotator\Models\BridgeTypes;
+use JohannesKrause\BridgeAnnotator\Models\Settings;
+
+function onStart(){
+    $this->loadPreview();
+    $this->loadBridgeTypes();
+    
+    if(!$this->checkSanity())
+        return;
+        
+    $this->loadNextBridgePicture();
+}
+
+function onClassifiedBridge(){
+    $category = $_POST['category'];
+    $bridgePictureId = Session::get('currentBridgePicture');
+    $bridgePicture = BridgePictures::find($bridgePictureId);
+    $bridgePicture->bridge_type_id = $category;
+    $bridgePicture->save();
+    
+    if($this->checkSanity()){
+        $nextPictureId = $this->loadNextBridgePicture();
+        return "$nextPictureId";
+    }
+}
+
+function onPreviewPictureClicked(){
+    $bridgePictureId = $_POST['bridgePictureId'];
+    $bridgePicture = BridgePictures::find($bridgePictureId);
+    $this->loadPictureByModel($bridgePicture);
+    return "$bridgePictureId";
+}
+
+function checkSanity(){
+    $workPackageId = Session::get('workPackageId');
+    
+    if(!Auth::check()){
+        $this['userNotLoggedIn'] = true;
+        return false;
+    }
+        
+    if(!Session::has('workPackageId')){
+        $this['noWorkPackageSelected'] = true;
+        return false;
+    }
+    
+    if(!$this->validWorkPackageId($workPackageId)){
+        $ths['invalidWorkPackageId'] = true;
+        return false;
+    }
+    
+    if(!$this->hasUnclassifiedBridgePictures($workPackageId)){
+        $workPackage = WorkPackage::find($workPackageId);
+        $workPackage->done = true;
+        $workPackage->save();
+        $this['workPackageEmpty'] = true;
+        return false;
+    }
+    
+    return true;
+}
+
+function loadNextBridgePicture(){    
+    $workPackageId = Session::get('workPackageId');
+    
+    $bridgePicture = $this->getNextUnclassifiedBridgePictureModel($workPackageId);
+    $bridgePictureId = $this->loadPictureByModel($bridgePicture);
+    
+    return $bridgePictureId;
+}
+
+function loadPictureByModel($bridgePicture){
+    $imageData = $this->getImageDataByModel($bridgePicture);
+    
+    Session::put('currentBridgePicture', $bridgePicture->id);
+    
+    $this['imageData'] = $imageData;
+    $this['bridgePictureId'] = $bridgePicture->id;
+    $this['gridImageId'] = $bridgePicture->grid_image_id;
+    $this['workPackageId'] = $bridgePicture->work_package_id;
+    
+    return $bridgePicture->id;
+}
+
+function loadPreview(){
+    $workPackageId = Session::get('workPackageId');
+    
+    if(!$workPackageId)
+        return;
+    
+    $workPackage = WorkPackage::find($workPackageId);
+    $bridgePictures = $workPackage->bridge;
+    foreach($bridgePictures as $bridgePicture)
+        $result[$bridgePicture->id] = $this->getImageDataByModel($bridgePicture);
+    
+    $this['workPackagePictures'] = $result;
+}
+
+function loadBridgeTypes(){
+    $bridgeTypes = BridgeTypes::all();
+    foreach($bridgeTypes as $bridgeType)
+        $bridgeType->hotkeyChar = chr($bridgeType->hotkey);
+        
+    $this['bridgeTypes'] = $bridgeTypes;
+}
+
+function getImageDataByModel($bridgePicture){
+    $dataSetPath = Settings::instance()->dataset_path;
+    $gridImageId = $bridgePicture->grid_image_id;
+    $imageFilePath = realpath($dataSetPath . DIRECTORY_SEPARATOR . $gridImageId.'.jpg');
+    
+    $result = base64_encode(file_get_contents($imageFilePath));
+    $result = 'data: '.mime_content_type($imageFilePath).';base64,'.$result;
+    
+    return $result;
+}
+
+function getNextUnclassifiedBridgePictureModel($workPackageId){
+    $workPackage = WorkPackage::find($workPackageId);
+    
+    $result = $workPackage->bridge()->where('bridge_type_id', 0)->take(1)->get();
+    
+    $result = $result[0];
+    return $result;
+}
+
+function hasUnclassifiedBridgePictures($workPackageId){
+    $workPackage = WorkPackage::find($workPackageId);
+    $bridgePictures = $workPackage->bridge()->where('bridge_type_id', 0)->get();
+    return (sizeof($bridgePictures) > 0);
+}
+
+function validWorkPackageId($workPackageId){
+    $workPackage = WorkPackage::find($workPackageId);
+    if($workPackage) return true;
+    else return false;
+}
+?>
+==
+{% if userNotLoggedIn %}
+    <p>Kein Nutzer eingeloggt. Klassifikation kann nicht vorgenommen werden.</p>
+{% elseif noWorkPackageSelected %}
+    <p>Kein Arbeitspaket ausgewählt.</p>
+{% else %}
+    <script>
+        function onPreviewPictureClicked(pictureId){
+            $.request('onPreviewPictureClicked', {
+                data: {bridgePictureId: pictureId},
+                update: {bridgePictureShower:'#bridgePicture'},
+                complete: updateHighlight
+            });
+        }
+        
+        function updateHighlight(data){
+            $('.picturePreviewPictureHighlight').attr('class', 'picturePreviewPicture');
+            
+            if(data.responseJSON.result == null)
+                return;
+                
+            var pictureId = "#"+data.responseJSON.result;
+            $(pictureId).attr('class', 'picturePreviewPicture picturePreviewPictureHighlight');
+        }
+    
+        $(document).keypress(function(e){
+            {% for bridgeType in bridgeTypes %}
+            if(e.charCode == {{ bridgeType.hotkey }}){
+                $.request('onClassifiedBridge', {
+                    data: {category: {{ bridgeType.id }} },
+                    update: {bridgePictureShower:'#bridgePicture'},
+                    complete: updateHighlight
+                });
+            }
+            {% endfor %}
+        });
+    </script>
+    <div id="bridgePicture" style="float:left;">
+        {% partial 'bridgePictureShower' %}
+    </div>
+    <div style="float:left; margin-top: 5%">
+        <ul style="list-style-type:none">
+            {% for bridgeType in bridgeTypes %}
+                <li> {{ bridgeType.hotkeyChar }} : {{ bridgeType.name }} </li>
+            {% endfor %}
+        <ul>
+    </div>
+    <div id="bridgePicturePreview" style="clear:both">
+        {% if workPackagePictures %}
+            {% partial 'picturePreview' picturePreviewSet=workPackagePictures highlight=bridgePictureId %}
+        {% endif %}
+    </div>
+{% endif %}

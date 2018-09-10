@@ -1,0 +1,10 @@
+name: WorkPackages
+form: $/johanneskrause/bridgeannotator/models/workpackage/fields.yaml
+modelClass: JohannesKrause\Bridgeannotator\Models\WorkPackage
+defaultRedirect: johanneskrause/bridgeannotator/workpackages
+create:
+    redirect: 'johanneskrause/bridgeannotator/workpackages/update/:id'
+    redirectClose: johanneskrause/bridgeannotator/workpackages
+update:
+    redirect: johanneskrause/bridgeannotator/workpackages
+    redirectClose: johanneskrause/bridgeannotator/workpackages

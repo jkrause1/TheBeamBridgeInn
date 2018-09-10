@@ -1,0 +1,4 @@
+title: BridgePictures
+modelClass: JohannesKrause\Bridgeannotator\Models\BridgePictures
+toolbar:
+    buttons: reorder_toolbar

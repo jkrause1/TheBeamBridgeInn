@@ -1,0 +1,10 @@
+name: Settings
+form: $/johanneskrause/bridgeannotator/models/settings/fields.yaml
+modelClass: JohannesKrause\BridgeAnnotator\Models\Settings
+defaultRedirect: johanneskrause/bridgeannotator/settings
+create:
+    redirect: 'johanneskrause/bridgeannotator/settings/update/:id'
+    redirectClose: johanneskrause/bridgeannotator/settings
+update:
+    redirect: johanneskrause/bridgeannotator/settings
+    redirectClose: johanneskrause/bridgeannotator/settings

@@ -1,0 +1,4 @@
+title: WorkPackages
+modelClass: JohannesKrause\Bridgeannotator\Models\WorkPackage
+toolbar:
+    buttons: reorder_toolbar

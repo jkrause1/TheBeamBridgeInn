@@ -1,0 +1,13 @@
+<?php
+   function onTest(){
+       echo "bla";
+   }
+?>
+Brückentypen werden folgendermaßen angegeben:
+<br/>
+<b>[Brückenname];[Brückenbeschreibung];[Hotkey]</b>
+<button data-request=onTest>test</button>
+
+
+
+

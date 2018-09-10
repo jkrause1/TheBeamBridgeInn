@@ -1,0 +1,22 @@
+fields:
+    dataset_path:
+        label: 'johanneskrause.bridgeannotator::lang.settings.images.path'
+        span: left
+        type: text
+    work_package_size:
+        label: 'johanneskrause.bridgeannotator::lang.settings.workpackages.size'
+        span: left
+        type: number
+    partial1:
+        span: full
+        path: $/johanneskrause/bridgeannotator/models/settings/_hint.htm
+        type: partial
+    bridge_types:
+        label: 'johanneskrause.bridgeannotator::lang.settings.bridgetypes.fieldname'
+        size: large
+        span: full
+        type: textarea
+    partial2:
+        span: auto
+        path: $/johanneskrause/bridgeannotator/models/settings/_createTableButton.htm
+        type: partial

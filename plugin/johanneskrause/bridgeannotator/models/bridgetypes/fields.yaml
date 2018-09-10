@@ -1,0 +1,17 @@
+fields:
+    name:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.bridgetypename'
+        span: auto
+        type: text
+    hotkey:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.hotkey'
+        span: auto
+        type: text
+    description:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.description'
+        size: large
+        span: full
+        disabled: 0
+        hidden: 0
+        required: 0
+        type: textarea

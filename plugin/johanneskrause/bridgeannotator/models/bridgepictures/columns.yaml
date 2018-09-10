@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+    grid_image_id:
+        label: grid_image_id
+        type: text
+    created_at:
+        label: created_at
+        type: datetime
+    updated_at:
+        label: updated_at
+        type: datetime
+    bridge_type_id:
+        label: bridge_type_id
+        type: number
+    work_package_id:
+        label: work_package_id
+        type: number

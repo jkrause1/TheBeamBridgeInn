@@ -1,0 +1,17 @@
+fields:
+    grid_image_id:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.bridgepictureid'
+        span: auto
+        type: number
+    bridge_type:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.bridgetypename'
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation
+    work_package:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.workpackage'
+        nameFrom: id
+        descriptionFrom: description
+        span: auto
+        type: relation

@@ -1,0 +1,24 @@
+plugin:
+    name: 'johanneskrause.bridgeannotator::lang.plugin.name'
+    description: 'johanneskrause.bridgeannotator::lang.plugin.description'
+    author: 'Johannes Krause'
+    icon: oc-icon-adn
+    homepage: ''
+navigation:
+    bridge-annotator-menu-item:
+        label: 'johanneskrause.bridgeannotator::lang.mainmenu.item.name'
+        url: johanneskrause/bridgeannotator/bridgetypes
+        icon: icon-life-ring
+        sideMenu:
+            bridge-types-menu-item:
+                label: 'johanneskrause.bridgeannotator::lang.sidemenu.items.bridgetypes.name'
+                url: johanneskrause/bridgeannotator/bridgetypes
+                icon: icon-sitemap
+            bridge-pictures-menu-item:
+                label: 'johanneskrause.bridgeannotator::lang.sidemenu.items.bridgepictures.name'
+                url: johanneskrause/bridgeannotator/bridgepictures
+                icon: icon-sitemap
+            work-package-menu-item:
+                label: 'johanneskrause.bridgeannotator::lang.sidemenu.items.workpackage.name'
+                url: johanneskrause/bridgeannotator/workpackages
+                icon: icon-sitemap

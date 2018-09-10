@@ -1,0 +1,15 @@
+description = "Should show a couple of pictures insde a box."
+==
+{% if picturePreviewSet %}
+<div class=picturePreview>
+    {% for key, picture in picturePreviewSet %}
+        <a href="javascript:void(0)" class="picturePreviewLink" onClick="onPreviewPictureClicked({{ key }})">
+            {% if key == highlight %}
+                <img src="{{ picture }}" id={{ key }} class="picturePreviewPicture picturePreviewPictureHighlight" />
+            {% else %}
+                <img src="{{ picture }}" id={{ key }} class="picturePreviewPicture" />
+            {% endif %}
+        </a>
+    {% endfor %}
+</div>
+{% endif %}

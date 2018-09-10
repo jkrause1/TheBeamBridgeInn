@@ -1,0 +1,10 @@
+name: BridgeTypes
+form: $/johanneskrause/bridgeannotator/models/bridgetypes/fields.yaml
+modelClass: JohannesKrause\Bridgeannotator\Models\BridgeTypes
+defaultRedirect: johanneskrause/bridgeannotator/bridgetypes
+create:
+    redirect: 'johanneskrause/bridgeannotator/bridgetypes/update/:id'
+    redirectClose: johanneskrause/bridgeannotator/bridgetypes
+update:
+    redirect: johanneskrause/bridgeannotator/bridgetypes
+    redirectClose: johanneskrause/bridgeannotator/bridgetypes

@@ -1,0 +1,45 @@
+description = "Default layout"
+
+[account]
+paramCode = "code"
+forceSecure = 0
+
+[session]
+security = "all"
+==
+<!--
+Author: Johannes Krause
+Created: 10.07.2018T16:00
+Description: This is the default layout file for all of the Beam Bridge Inn Theme
+-->
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{ this.page.title }}</title>
+        <meta name="title" content={{ this.page.meta_title }}>
+        <meta name="description" content={{ this.page.meta_description }}>
+        <link rel="stylesheet" type="text/css" href={{ 'assets/css/style.css'|theme }}>
+        <script src={{ 'assets/javascript/jquery.js'|theme }}></script>
+        {% framework extras %}
+        {% scripts %}
+    </head>
+    <body>
+        <header id="layout-header">
+        </header>
+        <section id="layout-nav">
+        {% partial 'nav' %}
+        </section>
+        <section id="layout-page">
+        {% page %}
+        </section>
+        <footer id="layout-footer">
+            <h3>Account</h3>
+            {% if user %}
+            <a href="" data-request="onLogout">Sign out</a>
+            {% endif %}
+            {% component 'account' %}
+            <br/>
+        </footer>
+    </body>
+</html>

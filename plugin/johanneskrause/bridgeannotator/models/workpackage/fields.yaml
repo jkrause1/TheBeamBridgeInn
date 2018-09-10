@@ -1,0 +1,12 @@
+fields:
+    id:
+        label: 'johanneskrause.bridgeannotator::lang.database.field.id'
+        span: auto
+        disabled: 1
+        type: number
+    worker:
+        label: 'johanneskrause.bridgeannotator::lang.Database.field.worker'
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation

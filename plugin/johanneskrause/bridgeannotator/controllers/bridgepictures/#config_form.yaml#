@@ -1,0 +1,10 @@
+name: BridgePictures
+form: $/johanneskrause/bridgeannotator/models/bridgepictures/fields.yaml
+modelClass: JohannesKrause\Bridgeannotator\Models\BridgePictures
+defaultRedirect: johanneskrause/bridgeannotator/bridgepictures
+create:
+    redirect: 'johanneskrause/bridgeannotator/bridgepictures/update/:id'
+    redirectClose: johanneskrause/bridgeannotator/bridgepictures
+update:
+    redirect: johanneskrause/bridgeannotator/bridgepictures
+    redirectClose: johanneskrause/bridgeannotator/bridgepictures

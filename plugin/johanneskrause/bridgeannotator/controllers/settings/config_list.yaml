@@ -1,0 +1,12 @@
+list: $/johanneskrause/bridgeannotator/models/settings/columns.yaml
+modelClass: JohannesKrause\BridgeAnnotator\Models\Settings
+title: Settings
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'johanneskrause/bridgeannotator/settings/update/:id'

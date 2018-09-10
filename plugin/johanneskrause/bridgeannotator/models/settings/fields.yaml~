@@ -1,0 +1,9 @@
+# ==================================
+#  Field Definitions
+# ==================================
+
+fields:
+    dataset_path:
+        span: left
+        label: johanneskrause.bridgeannotator::lang.settings.images.path
+        type: text

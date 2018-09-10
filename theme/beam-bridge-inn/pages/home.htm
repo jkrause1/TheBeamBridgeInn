@@ -1,0 +1,198 @@
+title = "home"
+url = "/"
+layout = "default"
+meta_title = "Home"
+meta_description = "Homepage of the beam bridge inn"
+is_hidden = 0
+==
+<?php
+use JohannesKrause\BridgeAnnotator\Models\Settings;
+use JohannesKrause\BridgeAnnotator\Models\WorkPackage;
+ 
+function onStart(){
+    $initPage = 1;
+    
+    Session::put('unassignedWorkPackagesPage', $initPage);
+    Session::put('userWorkPackagesPage', $initPage);
+}
+ 
+function onLoadImages(){
+    $pictures = scandir(Settings::instance()->dataset_path);
+    $pictures = array_diff($pictures, array('.', '..'));
+    $pictures = array_splice($pictures, 0, 1000);
+    return $pictures;
+}
+
+function onLoadImage(){
+    $fileName = $_POST['fileName'];
+    $image = "/home/johannes/Bachelorarbeit/Geograph/Photos/".$fileName;
+    $imageData = base64_encode(file_get_contents($image));
+    $src = 'data: '.mime_content_type($image).';base64,'.$imageData;
+    return '<img src="'.$src.'"/>';
+}
+
+function onSetPage(){
+    $page = $_POST['page'];
+    $section = $_POST['section'];
+    
+    Session::put($section, $page);
+}
+
+function onLoadUnassignedWorkPackages(){
+    $page = Session::get('unassignedWorkPackagesPage');
+    $this->loadPackages(0, $page, 'unassignedWorkPackages');
+    $this->buildPackagesNav(0, $page, 'unassignedWorkPackagesPage');
+}
+
+function onLoadUserPackages(){
+    if(!Auth::check())
+        return;
+    
+    $user = Auth::getUser();
+    $userId = $user->id;
+    
+    $page = Session::get('userWorkPackagesPage');
+    $this->loadPackages($userId, $page, 'userWorkPackages');
+    $this->buildPackagesNav($userId, $page, 'userWorkPackagesPage');
+}
+
+function onUnassignedPackageClicked(){
+    $package_id_POST = 'packageId';
+    
+    $packageId = $_POST[$package_id_POST];
+    $package = WorkPackage::find($packageId);
+    
+    if($package->user_id == 0){
+        $user = Auth::getUser();
+        $userId = $user->id;
+        $package->user_id = $userId;
+        $package->done = false;
+        $package->save();
+    }
+    
+    $this->onLoadUserPackages();
+    $this->onLoadUnassignedWorkPackages();
+}
+
+function onUserWorkerPackageClicked(){
+    $packageId = $_POST['packageId'];
+    
+    Session::put('workPackageId', $packageId);
+}
+
+function loadPackages($userId, $requestedPage, $resultVarName){
+    $packagesPerPage = 50;
+    
+    $result = WorkPackage::where('user_id', $userId)->skip($packagesPerPage*($requestedPage-1))->take($packagesPerPage)->get();
+    
+    $this[$resultVarName] = $result;
+}
+
+function buildPackagesNav($userId, $currentPage, $resultVarName){
+    $packagesPerPage = 50;
+    
+    $count = WorkPackage::where('user_id', $userId)->count();
+    $pageCount = ceil($count / $packagesPerPage);
+    
+    $nav = "<select onChange='changePage(this.value, \"$resultVarName\")'>";
+    for($i = 1; $i <= $pageCount; $i++){
+        if($i == $currentPage)
+            $nav .= "<option selected>$i</option>";
+        else
+            $nav .= "<option>$i</option>";
+    }
+    $nav .= '</select>';
+    
+    $this[$resultVarName] = $nav;
+}
+?>
+==
+<h1>Willkommen im Beam Bridge Inn</h1>
+
+{% if user %}
+    <p>Eingeloggt als {{ user.name }}</p>
+{% endif %}
+
+<script>
+
+function loadImages(pictures){
+    var countLoadThreads = 1;
+    
+    var loadImage = function(index){
+        var image = pictures[index];
+        $.request('onLoadImage', {
+            data: {fileName: image},
+            success: function(data){
+                $('#images').append(data.result);
+                index += countLoadThreads;
+                if(index < pictures.length)
+                    loadImage(index);
+            }
+        });
+    }
+    
+    if(pictures.length > 0)
+        for(var i = 0; i < countLoadThreads; i++)
+            loadImage(i);
+}
+
+function loadHeaderImage(){
+    
+    var loadImageToHeader = function(headerImage){
+        $('#layout-header').append(headerImage.result);
+    }
+    
+    var imagesLoaded = function(picturesArray){
+        var count = picturesArray.length;
+        var index = Math.floor(Math.random() * (count - 1));
+        var image = picturesArray[index];
+        $.request('onLoadImage', { data: {fileName: image}, success: loadImageToHeader });
+    };
+    
+    $.request('onLoadImages', { success: imagesLoaded } );
+}
+
+function changePage(page, section){
+    $.request('onSetPage', {
+        data: {page: page, section: section},
+        success: function(){
+            loadUnassignedWorkPackages();
+            loadUserWorkPackages();
+        }
+    });
+}
+
+function loadUnassignedWorkPackages(){
+    $.request('onLoadUnassignedWorkPackages',
+        {
+            update: {unassignedWorkPackagesPage: '#unassignedWorkPackages'}
+        });
+}
+
+function loadUserWorkPackages(){
+    $.request('onLoadUserPackages',
+        {
+            update: {userWorkPackagesPage: '#userWorkPackages'}
+        });
+}
+
+function initialize(){
+    loadUnassignedWorkPackages();
+    loadUserWorkPackages();
+    loadHeaderImage();
+}
+
+$(document).ready(function(){
+    initialize();
+});
+</script>
+    
+{% if user %}
+    <h3>Nicht zugewiesene Arbeitspakete</h3>
+    <div id="unassignedWorkPackages">
+    </div>
+    
+    <h3>Ihre Arbeitspakete</h3>
+    <div id="userWorkPackages">
+    </div>
+{% endif %}

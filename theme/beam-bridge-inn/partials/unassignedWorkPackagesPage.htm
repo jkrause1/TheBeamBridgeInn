@@ -1,0 +1,15 @@
+==
+{% if unassignedWorkPackages %}
+    <div>
+        {% for workPackage in unassignedWorkPackages %}
+        <a data-request="onUnassignedPackageClicked" data-request-data='packageId: "{{ workPackage.id }}"' data-request-update="'unassignedWorkPackagesPage':'#unassignedWorkPackages', 'userWorkPackagesPage': '#userWorkPackages'" href="" class="packageLink">
+            <span class="unassignedWorkPackage">
+                {{ workPackage.id }}
+            </span>
+        </a>
+        {% endfor %}
+        <p>
+        {{ unassignedWorkPackagesPage | raw }}
+        </p>
+    </div>
+{% endif %}

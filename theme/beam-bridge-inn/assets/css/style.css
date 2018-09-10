@@ -1,0 +1,111 @@
+html{
+    background-color: tan;
+}
+
+#layout-header img{
+    margin: auto;
+    display: block;
+    width: 100%;
+    height: 400px;
+}
+
+#layout-nav{
+    background-color: brown;
+    padding: 10px;
+}
+
+#layout-nav a{
+    color: orange;
+    
+}
+
+#unassignedWorkPackages{
+    border: solid 1px black;
+}
+
+#userWorkPackages{
+    border: solid 1px black;
+}
+
+.unassignedWorkPackage{
+    width: 9%;
+    height: 50px;
+    display: inline-block;
+    margin: 5px 0;
+    background-image: url('../images/package30.svg');
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: solid 2px blue;
+    border-radius: 15px;
+    text-align: left;
+    vertical-align: middle;
+    line-height: 50px;
+}
+
+.unassignedWorkPackage:hover{
+    color: red;
+    background-image: url('../images/openPackage.svg');
+}
+
+.userWorkPackage{
+    width: 9%;
+    height: 50px;
+    display: inline-block;
+    margin: 5px 0;
+    background-image: url('../images/package30.svg');
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: solid 2px blue;
+    border-radius: 15px;
+    text-align: left;
+    vertical-align: middle;
+    line-height: 50px;
+}
+
+.userWorkPackage-done{
+    width: 9%;
+    height: 50px;
+    display: inline-block;
+    margin: 5px 0;
+    background-image: url('../images/tick-inside-circle.svg');
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: solid 2px green;
+    border-radius: 15px;
+    text-align: left;
+    vertical-align: middle;
+    line-height: 50px;
+}
+
+.picturePreview{
+    border: solid red 5px;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.picturePreviewLink{
+    text-decoration:none;
+}
+
+.picturePreview .picturePreviewPicture{
+    width: 9%;
+    height: 100px;
+    display: inline-block;
+    margin: 5px 0;
+}
+
+.picturePreviewPictureHighlight{
+    border: solid 5px green;
+}
+
+.userWorkPackage:hover{
+    color: red;
+    background-image: url('../images/openPackage.svg');
+}
+
+.packageLink{
+    text-decoration:none;
+}

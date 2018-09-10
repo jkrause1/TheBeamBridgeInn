@@ -1,0 +1,22 @@
+==
+{% if userWorkPackages %}
+    <div>
+        {% for workPackage in userWorkPackages %}
+        <a data-request="onUserWorkerPackageClicked" data-request-data='packageId: "{{ workPackage.id }}"' data-request-redirect='{{ 'classification'|page }}' href="" class="packageLink">
+            
+            {% if workPackage.done %}
+                <span class="userWorkPackage-done">
+                    {{ workPackage.id }}
+                </span>
+            {% else %}
+                <span class="userWorkPackage">
+                    {{ workPackage.id }}
+                </span>
+            {% endif %}
+        </a>
+        {% endfor %}
+        <p>
+        {{ userWorkPackagesPage | raw }}
+        </p>
+    </div>
+{% endif %}
